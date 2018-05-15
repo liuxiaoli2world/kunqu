@@ -1,0 +1,107 @@
+@border: 1px solid #ccc;
+
+.table-title(){
+    display: inline-block;
+    text-align: center;
+}
+.tab-content{
+    color: #666;
+    .head{
+        padding: 40px 40px 30px 40px;
+        font-size: 12px;
+        .label-name{
+            margin-left: 30px;
+            &:first-child{
+                margin-left: 0;
+            }
+        }
+        .ant-btn{
+            margin-left: 20px;
+        }
+    }
+    .table{
+        padding: 0 40px;
+        color: #333;
+        .table-head{
+            background: #5a6378;
+            color: #fff;
+            height: 50px;
+            line-height: 50px;
+        }
+        .row2{
+            border-right: 1px solid #f2f2f2;
+            height: 158px;
+            line-height: 158px;
+            float: left;
+            &:last-child{
+                border: none;
+            }
+        }
+        .row1-column1,.row1-column2{
+            display:inline-block;
+            line-height:80px;
+            margin:0 90px 0 96px;
+        }
+        .column1,.column5{
+            width:calc(100% / 7 * 2);
+            .table-title()
+        }
+        .column1{
+            box-sizing: border-box;
+            text-align: left;
+            padding-left: 96px;
+        }
+        .column2{
+            width: calc(100% / 7);;
+            .table-title()
+        }
+        .column3{
+            width: calc(100% / 7);;
+            .table-title()
+        }
+        .column4{
+            width: calc(100% / 7);;
+            .table-title()
+        }
+        .table-body-item-row1{
+            height:62px;
+            background: #f2f2f2;
+            color:#999;
+            font-size: 14px;
+            border-left: @border;
+            border-right: @border;
+        }
+        .table-body-item-row2{
+            height: 158px;
+            border: @border;
+        }
+        img{
+            vertical-align: middle;
+            margin-right: 28px;
+        }
+        .row2-img{
+            width: 100px;
+            height: 100px;
+            margin-top: 28px;
+        }
+        .head_img{
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .goodName{
+            width: 220px;
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap; 
+        }
+    }
+    .ant-pagination{
+        margin: 30px 40px 30px 0;
+    }
+    .ant-pagination-prev .ant-pagination-item-link, .ant-pagination-next .ant-pagination-item-link{
+        height: 32px;
+        border-radius: 0;
+    }
+}

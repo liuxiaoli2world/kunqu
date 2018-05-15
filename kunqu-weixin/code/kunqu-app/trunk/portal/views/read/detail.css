@@ -1,0 +1,36 @@
+ul,li{
+	list-style:none;
+	padding:0;
+	margin:0;
+}
+.detail-container{
+	padding:0.3rem 0.3rem 2rem 0.3rem;
+}
+.detail-title{
+	line-height:0.75rem;
+	font-size:0.5rem;
+	text-align:justify;
+}
+.date-author{
+	color:#888;
+	font-size:0;
+	overflow:hidden;
+	text-align:justify;
+	line-height: 30px;
+}
+.date-author .date{
+	float:left;
+	font-size: 14px;
+	margin: 5px 0;
+}
+.date-author .author{
+	float:left;
+	font-size: 14px;
+	margin: 5px 0 5px 0.4rem;
+}
+.clear{
+	clear:both;
+}
+.detail-cont{
+	font-size: 14px;
+}

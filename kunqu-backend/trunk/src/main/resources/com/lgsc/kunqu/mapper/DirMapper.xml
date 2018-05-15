@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lgsc.kunqu.mapper.DirMapper" >
+  <resultMap id="BaseResultMap" type="com.lgsc.kunqu.model.Dir" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="dir_id" property="dirId" jdbcType="BIGINT" />
+    <result column="parent_id" property="parentId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="has_leaf" property="hasLeaf" jdbcType="INTEGER" />
+    <result column="content_type" property="contentType" jdbcType="VARCHAR" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+    <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+    <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="CompositeResultMap" type="java.util.Map">
+  	<result column="composite_id" property="compositeId" jdbcType="BIGINT" />
+  	<result column="composite_name" property="compositeName" jdbcType="VARCHAR" />
+  	<result column="composite_desc" property="compositeDesc" jdbcType="VARCHAR" />
+  	<result column="composite_image" property="compositeImage" jdbcType="VARCHAR" />
+  	<result column="composite_type" property="compositeType" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="SourceCountResultMap" type="java.util.Map">
+  	<result column="source_type" property="sourceType" jdbcType="VARCHAR" />
+  	<result column="count" property="count" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <!-- 查询典论，查询了剧典、曲典专辑、文章三张表 -->
+  <select id="selectComposite" parameterType="Long" resultMap="CompositeResultMap">
+  	select d.drama_id as composite_id,d.drama_name as composite_name,d.drama_desc as composite_desc,i.image_url as composite_image,'drama' as composite_type 
+		from drama d left join drama_image i on d.drama_id = i.drama_id and i.image_scene = '02' where d.dir_id = #{dirId}
+	union
+	select s.special_id,s.special_name,s.special_desc,i.image_url,'special' 
+		from special s left join special_image i on s.special_id = i.special_id and i.image_scene = '04' where s.dir_id = #{dirId}
+	union
+	select a.article_id,a.title,a.article_desc,i.image_url,'article' 
+		from article a left join article_image i on a.article_id = i.article_id and i.image_scene = '01' where a.dir_id = #{dirId}
+  </select>
+  
+  <!-- 根据目录id查询祖先节点，不包括当前目录 -->
+  <select id="selectParentList" resultMap="BaseResultMap">
+  	select * from dir where find_in_set(dir_id, findParentList(#{dirId})) and dir_id != #{dirId}
+  </select>
+  
+  <!-- 根据目录id查询后代节点，不包括当前目录 -->
+  <select id="selectChildList" resultMap="BaseResultMap">
+  	select * from dir where find_in_set(dir_id, findChildList(#{dirId})) and dir_id != #{dirId}
+  </select>
+  
+  <!-- 根据目录id查询子目录 -->
+  <select id="selectChild" parameterType="Long" resultMap="BaseResultMap">
+  	select * from dir where parent_id = #{dirId}
+  </select>
+  
+  <!-- 查询资源数量 -->
+  <select id="selectSourceCount" resultMap="SourceCountResultMap">
+  	select 'source_type', 'count'
+	union
+	select 'drama', cast(count(0) as char) from drama
+	union
+	select 'special', cast(count(0) as char) from special
+	union
+	select 'article', cast(count(0) as char) from article
+	limit 1,3
+  </select>
+  
+</mapper>

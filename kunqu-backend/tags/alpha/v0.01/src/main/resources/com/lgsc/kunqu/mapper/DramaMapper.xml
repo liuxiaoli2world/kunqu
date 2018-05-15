@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lgsc.kunqu.mapper.DramaMapper">
+	<resultMap id="BaseResultMap" type="com.lgsc.kunqu.model.Drama">
+		<!-- WARNING - @mbg.generated -->
+		<id column="drama_id" property="dramaId" jdbcType="BIGINT" />
+		<result column="drama_name" property="dramaName" jdbcType="VARCHAR" />
+		<result column="drama_desc" property="dramaDesc" jdbcType="VARCHAR" />
+		<result column="is_hottest" property="isHottest" jdbcType="INTEGER" />
+		<result column="is_list_recommend" property="isListRecommend" jdbcType="INTEGER" />
+		<result column="is_index_recommend" property="isIndexRecommend" jdbcType="INTEGER" />
+		<result column="is_highlight" property="isHighlight" jdbcType="INTEGER" />
+		<result column="is_subject" property="isSubject" jdbcType="INTEGER" />
+		<result column="paly_amount" property="palyAmount" jdbcType="INTEGER" />
+		<result column="age_tag_id" property="ageTagId" jdbcType="BIGINT" />
+		<result column="author_tag_id" property="authorTagId" jdbcType="BIGINT" />
+		<result column="repertoire_tag_id" property="repertoireTagId" jdbcType="BIGINT" />
+		<result column="dir_id" property="dirId" jdbcType="BIGINT" />
+		<result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+		<result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<resultMap extends="BaseResultMap" id="DramaImageResultMap" type="com.lgsc.kunqu.model.Drama">
+		<collection column="drama_id" property="dramaImages" ofType="com.lgsc.kunqu.model.DramaImage" select="com.lgsc.kunqu.mapper.DramaImageMapper.selectByDramaId" />
+	</resultMap>
+	
+	<resultMap id="ClassifyResultMap" type="com.lgsc.kunqu.model.Drama">
+		<id column="drama_id" property="dramaId" jdbcType="BIGINT" />
+		<result column="drama_name" property="dramaName" jdbcType="VARCHAR" />
+		<result column="drama_desc" property="dramaDesc" jdbcType="VARCHAR" />
+		<collection column="drama_id" property="dramaImages" ofType="com.lgsc.kunqu.model.DramaImage" select="com.lgsc.kunqu.mapper.DramaImageMapper.selectByDramaId" />
+	</resultMap>
+
+	<!-- 根据剧目标签id查询剧典，返回结果附加剧典图片 -->
+	<select id="selectDramaByRepertoireTagId" parameterType="Long" resultMap="DramaImageResultMap">
+		select d.* from drama d inner join repertoire_tag r on
+		d.repertoire_tag_id=r.repertoire_tag_id where r.repertoire_tag_id = #{repertoireTagId}
+	</select>
+
+	<!-- 根据角色标签id查询剧典，返回结果附加剧典图片 -->
+	<select id="selectDramaByRoleTagId" parameterType="Long" resultMap="DramaImageResultMap">
+		select d.* from drama d inner join role_tag_drama r on d.drama_id =
+		r.drama_id where r.role_tag_id = #{roleTagId}
+	</select>
+
+	<!-- 根据作者id标签查询剧典 -->
+	<select id="selectDramaByAuthorTagId" parameterType="Long" resultMap="DramaImageResultMap">
+		select * FROM kunqu.drama s where s.author_tag_id = #{authorTagId}
+	</select>
+	<!-- 根据剧典id查询剧典 -->
+	<select id="selectById" parameterType="long" resultMap="DramaImageResultMap">
+		select * from drama where drama_id=#{dramaId} 
+	</select>
+	
+	<!-- 根据剧典id list查询剧典 -->
+	<select id="selectByIds" resultMap="DramaImageResultMap">
+    	select * from drama where drama_id in 
+    	<foreach collection="dramaIds" item="dramaId" open="(" close=")" separator=",">
+    	#{dramaId} 
+    </foreach>
+    ORDER BY  FIELD(drama_id,
+  				<foreach collection="dramaIds" separator="," close=")" open=" "  item="item">
+  					 #{item}
+  				</foreach>
+    </select>
+
+	<!-- 根据年代标签id查询剧典,返回结果附加剧典图片 -->
+	<select id="selectDramaByAgeTagId" parameterType="Long" resultMap="DramaImageResultMap">
+		<!-- select * from drama a inner join age_tag t on a.age_tag_id=t.age_tag_id where t.age_tag_id=#{ageTagId} -->
+		select * from drama where age_tag_id=#{ageTagId}
+	</select>
+
+	<!-- 修改dir_id为null -->
+	<update id="updateDirIdNull" parameterType="Long">
+		update drama set dir_id = null where dir_id = #{dirId}
+	</update>
+	
+	<!-- 根据标签查询 -->
+	<select id="selectByTag" parameterType="Map" resultMap="ClassifyResultMap">
+		select * from drama 
+		<trim prefix="where" prefixOverrides="and | or">
+			<if test="ageTagId != null">
+				and age_tag_id = #{ageTagId}
+			</if>
+			<if test="authorTagId != null">
+				and author_tag_id = #{authorTagId}
+			</if>
+			<if test="repertoireTagId != null">
+				and repertoire_tag_id = #{repertoireTagId}
+			</if>
+			<if test="roleTagId != null">
+				and drama_id in (select drama_id from role_tag_drama where role_tag_id = #{roleTagId})
+			</if>
+			<if test="keyword != null">
+				and drama_name like concat('%',#{keyword},'%')
+			</if>
+		</trim>
+		order by created_at desc
+	</select>
+	
+	<!-- 根据关键字查询 -->
+	<select id="selectByKeyword" resultMap="ClassifyResultMap">
+		select * from drama 
+		<trim prefix="where" prefixOverrides="and | or">
+			<if test="keyword != null">
+				and drama_name like concat('%',#{keyword},'%')
+			</if>
+		</trim>
+		order by created_at desc
+	</select>
+
+	<!-- 综合查询 -->
+	<select id="selects" parameterType="int" resultMap="DramaImageResultMap">
+		select * from drama
+		<where>
+			<if test="type==1">
+				is_hottest=1
+			</if>
+			<if test="type==2">
+				is_list_recommend=1
+			</if>
+			<if test="type==3">
+				is_index_recommend=1
+			</if>
+			<if test="type==4">
+				is_highlight=1
+			</if>
+			<if test="type==5">
+				is_subject=1
+			</if>
+		</where>
+		order by paly_amount desc
+	</select>
+
+</mapper>

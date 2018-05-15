@@ -1,0 +1,80 @@
+ul,li{
+	list-style:none;
+	padding:0;
+	margin:0;
+}
+.record-list{
+	width:100%;
+	margin:0 auto;
+	overflow:hidden;
+	padding-bottom:1.15rem;
+}
+.record-item{
+	position:relative;
+	overflow:hidden;
+	padding-bottom:0.2rem;
+	padding-top:0.3rem;
+	border-bottom:1px solid #e3e3e3;
+}
+.record-list .record-item:last-child{
+	border-bottom:0;
+}
+.left-cont{
+	float:left;
+	width:3.2rem;
+	height:1.8rem;
+	margin-left:0.15rem;
+}
+.right-cont{
+	float:left;
+	width:4rem;
+	margin-right:0.15rem;
+	padding-left:0.15rem;
+	box-sizing:border-box;
+}
+.record-title{
+	font-size:0.28rem;
+	margin-bottom:0.2rem;
+	color:#333;
+}
+.record-desc{
+	font-size:0.22rem;
+	line-height:1.7;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+	color:#727070;
+}
+.record-date{
+	font-size:0.2rem;
+	margin:0.2rem 0;
+}
+.record-nav-list{
+	font-size: 0.28rem;
+    overflow: hidden;
+    height: 0.925rem;
+    line-height: 0.9rem;
+    background: #f2f2f2;
+    box-sizing: border-box;
+}
+.record-nav-list li{
+	float:left;
+	width:1.9rem;
+	text-align:center;
+	margin:0 0.3rem;
+}
+.record-nav-list li.current{
+	color:#b89a71;
+	font-weight:bold;
+	border-bottom:2px solid #b89a71;
+}
+.record-item .play-icon{
+	position: absolute;
+	bottom: 0.25rem;
+	left: 3rem;
+}
+.record-item .play-drama{
+	left:24%;
+}

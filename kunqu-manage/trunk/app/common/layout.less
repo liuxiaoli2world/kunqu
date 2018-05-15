@@ -1,0 +1,89 @@
+@bg : #393f4f;
+.ant-layout.ant-layout-has-sider{
+    height: 100vh;
+    .ant-layout-sider{
+        background: @bg;
+    }
+    .ant-menu{
+        background: @bg;
+        border-right: none;
+        a{
+            color: #fff;
+            img{
+                vertical-align: middle;
+                margin-right: 25px;
+            }
+        }
+        .ant-menu-item{
+            height:60px;
+            line-height: 60px;
+            border-left: 5px solid @bg;  
+            font-size: 16px;
+            padding-left: 59px;
+            &:active{
+                background: @bg;
+            }
+        }
+        &:not(.ant-menu-horizontal){
+            .ant-menu-item-selected{
+                background: #9c8571;
+                border-left: 5px solid #f56d03;   
+            }
+        } 
+        &.ant-menu-vertical{
+            .ant-menu-item{
+                margin-left: 0;
+                left: 0;
+            }
+        }
+    }
+    .logo-title{
+        vertical-align: middle;
+    }
+}
+.logo{
+    background: @bg;
+    text-align: center;
+    padding: 24px 0 39px 0;
+}
+
+.reset-antd-input(){
+    border-color: #f56d03;
+    outline: 0;
+    box-shadow: none;
+}
+.ant-select-lg>.ant-select-selection,.ant-input.ant-input-lg,.ant-btn.ant-btn-lg{
+	border-radius: 2px;
+}
+.ant-btn{
+    &.ant-btn-lg,&.ant-btn-primary:hover,&.ant-btn-primary:focus{
+        background: #f56d03;
+        color: #fff;
+        border-color: #f56d03;	
+        font-size: 12px;
+        line-height: 1;
+    }
+}
+.ant-input{
+    &.ant-input-lg{
+        &:hover,&:focus,&:active{
+            .reset-antd-input
+        }
+    }
+}
+.ant-select-lg{
+    .ant-select-selection{
+        .reset-antd-input
+        &:focus,&:active,&:hover{
+            .reset-antd-input
+        }
+    }
+    
+    &.ant-select-focused .ant-select-selection{
+        .reset-antd-input
+        
+    }
+}
+.ant-calendar-picker:hover .ant-input-lg.ant-calendar-picker-input:not(.ant-input-disabled){
+    border-color: #f56d03;
+}

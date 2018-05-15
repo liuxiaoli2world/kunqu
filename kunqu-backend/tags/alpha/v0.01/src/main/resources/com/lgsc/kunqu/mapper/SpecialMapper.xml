@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lgsc.kunqu.mapper.SpecialMapper">
+	<resultMap id="BaseResultMap" type="com.lgsc.kunqu.model.Special">
+		<!-- WARNING - @mbg.generated -->
+		<id column="special_id" property="specialId" jdbcType="BIGINT" />
+		<result column="special_name" property="specialName" jdbcType="VARCHAR" />
+		<result column="source" property="source" jdbcType="VARCHAR" />
+		<result column="special_desc" property="specialDesc" jdbcType="VARCHAR" />
+		<result column="dir_url" property="dirUrl" jdbcType="VARCHAR" />
+		<result column="is_index_recommend" property="isIndexRecommend"
+			jdbcType="INTEGER" />
+		<result column="is_subject" property="isSubject" jdbcType="INTEGER" />
+		<result column="like_amount" property="likeAmount" jdbcType="INTEGER" />
+		<result column="paly_amount" property="palyAmount" jdbcType="INTEGER" />
+		<result column="age_tag_id" property="ageTagId" jdbcType="BIGINT" />
+		<result column="author_tag_id" property="authorTagId" jdbcType="BIGINT" />
+		<result column="repertoire_tag_id" property="repertoireTagId"
+			jdbcType="BIGINT" />
+		<result column="dir_id" property="dirId" jdbcType="BIGINT" />
+		<result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+		<result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<resultMap type="com.lgsc.kunqu.model.Special" id="SpecialOperaResultMap"
+		extends="BaseResultMap">
+		<collection property="operaList" ofType="com.lgsc.kunqu.model.Opera"
+			select="com.lgsc.kunqu.mapper.OperaMapper.selectOperaList" column="special_id">
+		</collection>
+
+		<collection property="imageList" ofType="com.lgsc.kunqu.model.SpecialImage"
+			select="com.lgsc.kunqu.mapper.SpecialImageMapper.selectSpecialImageById"
+			column="special_id">
+		</collection>
+	</resultMap>
+	<!-- resultMapForWeichat-->
+	<resultMap type="com.lgsc.kunqu.model.SpecialWeiChat" id="SpecialWeiChatMap">
+		<id column="special_id" property="specialId" jdbcType="BIGINT" />
+		<result column="special_name" property="specialName" jdbcType="VARCHAR" />
+		<result column="special_desc" property="specialDesc" jdbcType="VARCHAR" />
+		<association property="imageUrl" column="special_id"  select="com.lgsc.kunqu.mapper.SpecialImageMapper.selectWxImage">
+        </association>
+		<collection property="operaList" ofType="com.lgsc.kunqu.model.Opera"
+			select="com.lgsc.kunqu.mapper.OperaMapper.selectOperaList" column="special_id">
+		</collection>
+	</resultMap>
+	<resultMap id="ClassifyResultMap" type="com.lgsc.kunqu.model.Special">
+		<id column="special_id" property="specialId" jdbcType="BIGINT" />
+		<result column="special_name" property="specialName" jdbcType="VARCHAR" />
+		<result column="special_desc" property="specialDesc" jdbcType="VARCHAR" />
+		<collection column="special_id" property="imageList"
+			ofType="com.lgsc.kunqu.model.SpecialImage"
+			select="com.lgsc.kunqu.mapper.SpecialImageMapper.selectSpecialImageById" />
+	</resultMap>
+
+	<!-- 根据角色id 查询曲典专辑 -->
+	<select id="selectSpecialByRoleTagId" parameterType="Long"
+		resultMap="BaseResultMap">
+		select s.* from special s inner join role_tag_special r on
+		s.special_id =
+		r.special_id where r.role_tag_id = #{roleTagId}
+	</select>
+
+	<!-- 根据剧目标签id 查询曲典专辑 -->
+	<select id="selectSpecialByRepertoireTagId" parameterType="Long"
+		resultMap="SpecialOperaResultMap">
+		select * from special s
+		inner join repertoire_tag r on
+		s.repertoire_tag_id =r.repertoire_tag_id
+		where r.repertoire_tag_id =
+		#{RepertoireTagId}
+	</select>
+
+	<!-- 根据作者标签查询曲典专辑 -->
+	<select id="selectSpecialByAuthorTagId" parameterType="Long"
+		resultMap="SpecialOperaResultMap">
+		SELECT * FROM kunqu.special s
+		inner join kunqu.author_tag a on s.author_tag_id =a.author_tag_id
+		where s.author_tag_id = #{authorTagId}
+	</select>
+
+	<!-- 根据年代标签id查询剧典专辑 -->
+	<select id="selectSpecialByAgeTagId" parameterType="Long"
+		resultMap="SpecialOperaResultMap">
+		select * from special s
+		inner join age_tag r on s.age_tag_id
+		=r.age_tag_id
+		where r.age_tag_id = #{ageTagId}
+	</select>
+
+	<!-- 修改dir_id为null -->
+	<update id="updateDirIdNull" parameterType="Long">
+		update special set
+		dir_id = null where dir_id = #{dirId}
+	</update>
+
+	<!-- 根据标签查询 -->
+	<select id="selectByTag" parameterType="Map" resultMap="ClassifyResultMap">
+		select * from special
+		<trim prefix="where" prefixOverrides="and | or">
+			<if test="ageTagId != null">
+				and age_tag_id = #{ageTagId}
+			</if>
+			<if test="authorTagId != null">
+				and author_tag_id = #{authorTagId}
+			</if>
+			<if test="repertoireTagId != null">
+				and repertoire_tag_id = #{repertoireTagId}
+			</if>
+			<if test="roleTagId != null">
+				and special_id in (select special_id from
+				role_tag_special where role_tag_id = #{roleTagId})
+			</if>
+			<if test="keyword != null">
+				and special_name like concat('%',#{keyword},'%')
+			</if>
+		</trim>
+		order by created_at desc
+	</select>
+
+	<!-- 根据关键字查询 -->
+	<select id="selectByKeyword" resultMap="ClassifyResultMap">
+		select * from special
+		<trim prefix="where" prefixOverrides="and | or">
+			<if test="keyword != null">
+				and special_name like concat('%',#{keyword},'%')
+			</if>
+		</trim>
+		order by created_at desc
+	</select>
+	<!-- 根据一组id查询曲典 -->
+	<select id="selectSpecialBySpecialIds" resultMap="SpecialOperaResultMap"
+		parameterType="list">
+		select * from special
+		<where>
+			special_id in
+			<foreach item="item" collection="ids" separator="," open="("
+				close=")">
+				#{item, jdbcType=NUMERIC}
+			</foreach>
+		</where>
+		ORDER BY FIELD(special_id,
+		<foreach collection="ids" separator="," close=")" open=" "
+			item="item">
+			#{item}
+		</foreach>
+
+	</select>
+	<!-- 查询所有曲典专辑 -->
+	<select id="selectAllSpecial" resultMap="SpecialOperaResultMap"> select * from
+		kunqu.special
+	</select>
+	<!-- 查询曲典专辑详细 -->
+	<select id="selectOneSpecial" resultMap="SpecialOperaResultMap">
+		select * from
+		kunqu.special s where s.special_id=#{specialId}
+	</select>
+	<!-- 查询前台推荐 -->
+	<select id="selectSpecialIsIndexRecommend" resultMap="SpecialOperaResultMap">
+		select * from kunqu.special where is_index_recommend=1
+	</select>
+	<!-- 查询曲典专辑 -->
+	<select id="selectSpecialIsSubject" resultMap="SpecialOperaResultMap">
+		select * from kunqu.special s where is_subject=1
+	</select>
+	<!-- 查询所有曲典专辑微信 -->
+	<select id="selectSpecialForWeichat" resultMap="SpecialWeiChatMap">
+			select * from special
+	</select>
+
+
+
+
+</mapper>

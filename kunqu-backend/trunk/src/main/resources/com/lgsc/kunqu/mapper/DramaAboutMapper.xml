@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lgsc.kunqu.mapper.DramaAboutMapper">
+	<resultMap id="BaseResultMap" type="com.lgsc.kunqu.model.DramaAbout">
+		<!-- WARNING - @mbg.generated -->
+		<id column="drama_about_id" property="dramaAboutId" jdbcType="BIGINT" />
+		<result column="drama_id" property="dramaId" jdbcType="BIGINT" />
+		<result column="about_id" property="aboutId" jdbcType="BIGINT" />
+		<result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+		<result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<resultMap id="DramaIdAndAboutIdResultMap" type="com.lgsc.kunqu.common.vo.DramaAboutDto">
+		<result column="is_about" property="isAbout" jdbcType="VARCHAR" />
+		<association column="drama_id" property="drama" select="com.lgsc.kunqu.mapper.DramaMapper.selectById" />
+	</resultMap>
+	
+	<!-- 根据dramaId查询所有剧典和是否为相关剧典，dramaId必填，dramaName选填 -->
+	<select id="selectDramaAndAbout" resultMap="DramaIdAndAboutIdResultMap">
+		select d.drama_id, (case when d.drama_id in (select about_id from drama_about c where c.drama_id = #{dramaId}) then 'y' else 'n' end) as is_about
+		from drama d 
+		left join drama_about da on d.drama_id = da.drama_id and d.drama_id = #{dramaId}
+		<where>
+			<if test="dramaId != null">
+				and d.drama_id != #{dramaId}
+			</if>
+			<if test="dramaName != null">
+				and d.drama_name like concat('%', #{dramaName}, '%')
+			</if>
+		</where>
+	</select>
+
+	<select id="selectAboutById" parameterType="long" resultType="long">
+		select about_id from drama_about where drama_id=#{dramaId}
+	</select>
+
+	<delete id="deleteByDramaIdAndAboutId" >
+		delete from drama_about where drama_id=#{dramaId} and about_id=#{aboutId}
+	</delete>
+	
+	<delete id="deleteByAboutId" >
+		delete from drama_about where about_id=#{aboutId}
+	</delete>
+	
+	<delete id="deleteByDramaId" parameterType="long">
+		delete from drama_about where drama_id=#{dramaId}
+	</delete>
+</mapper>

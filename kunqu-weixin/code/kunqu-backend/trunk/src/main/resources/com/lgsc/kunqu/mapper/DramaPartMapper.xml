@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lgsc.kunqu.mapper.DramaPartMapper">
+	<resultMap id="BaseResultMap" type="com.lgsc.kunqu.model.DramaPart">
+		<!-- WARNING - @mbg.generated -->
+		<id column="drama_part_id" property="dramaPartId" jdbcType="BIGINT" />
+		<result column="drama_id" property="dramaId" jdbcType="BIGINT" />
+		<result column="part_name" property="partName" jdbcType="VARCHAR" />
+		<result column="part_url" property="partUrl" jdbcType="VARCHAR" />
+		<result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+		<result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<!-- 根据剧典id查询剧典片段 -->
+	<select id="selectPartById" parameterType="long" resultMap="BaseResultMap">
+		select * from drama_part where drama_id=#{dramaId}
+	</select>
+</mapper>

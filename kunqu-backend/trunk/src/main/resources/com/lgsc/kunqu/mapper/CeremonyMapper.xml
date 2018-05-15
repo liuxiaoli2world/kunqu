@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lgsc.kunqu.mapper.CeremonyMapper">
+	<resultMap id="BaseResultMap" type="com.lgsc.kunqu.model.Ceremony">
+		<!-- WARNING - @mbg.generated -->
+		<id column="ceremony_id" property="ceremonyId" jdbcType="BIGINT" />
+		<result column="ceremony_name" property="ceremonyName"
+			jdbcType="VARCHAR" />
+		<result column="cover_img" property="coverImg" jdbcType="VARCHAR" />
+		<result column="ceremony_desc" property="ceremonyDesc"
+			jdbcType="VARCHAR" />
+		<result column="is_index_recommend" property="isIndexRecommend"
+			jdbcType="INTEGER" />
+		<result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+		<result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<resultMap type="com.lgsc.kunqu.dto.CeremonyDTO" id="CeremonyWithCountMap"
+		extends="BaseResultMap">
+		<result column="article_count" property="articleCount"
+			jdbcType="INTEGER" />
+		<result column="drama_count" property="dramaCount" jdbcType="INTEGER" />
+		<result column="special_count" property="specialCount"
+			jdbcType="INTEGER" />
+	</resultMap>
+
+	<select id="selectByKeyword" resultMap="CeremonyWithCountMap">
+		select c.*,
+			(SELECT count(*) from ceremony_source where ceremony_id = c.ceremony_id and
+			source_type = "article" ) as article_count,
+			(SELECT count(*) from ceremony_source where ceremony_id = c.ceremony_id and
+			source_type = "drama" ) as drama_count,
+			(SELECT count(*) from ceremony_source where ceremony_id = c.ceremony_id and
+			source_type = "special" ) as special_count
+		from ceremony c
+		<where>
+			<if test="keyword != null and keyword != '' ">
+				c.ceremony_name like CONCAT('%',#{keyword},'%')
+			</if>
+		</where>
+		order by c.updated_at
+	</select>
+
+</mapper>

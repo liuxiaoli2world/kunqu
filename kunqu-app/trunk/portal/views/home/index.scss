@@ -1,0 +1,326 @@
+.home-wrapper{
+.banner{
+	margin: 0 0 20px 0;
+	img{
+		width:100%;
+		height:394px;
+	}
+}
+
+.container{
+	width:1200px;
+	margin:0 auto;
+	padding:0;
+	color:rgba(0, 0, 0, 0.65);
+	.dramaList,.topicList,.operaList,.articleList,.typesList{
+		display:flex;
+		padding-top:20px;
+		height:324px;
+		&.topicList{
+			padding: 16px 5px 0 5px;
+			margin-bottom:20px;
+			height:216px;
+		}
+		&.operaList{
+			padding-top:15px;
+			height:501px;
+		}
+		&.articleList{
+			padding:30px 4px 0;
+			height:299px;
+		}
+		&.typeList{
+			height:316px;
+		}
+		.drama_top{
+			position:relative;
+			width: 457px;
+			height:285px;
+			flex: 0 0 457px;
+			float:left;
+			img{
+				width:100%;
+				height:100%;
+			}
+			.info{
+				height:58px;
+				color:#fff;
+				.playicon{
+					line-height:58px;
+					float:left;
+					font-size:36px;
+					margin: 0 40px;
+				}
+				.dramaName{
+					font-size: 16px;
+					margin-top: 6px;
+				}
+				.dramaOther{
+					font-size: 12px;
+					overflow: hidden;
+    				text-overflow: ellipsis;
+    				width: 55%;
+    				white-space: nowrap;
+				}
+			}
+		}
+		.drama_rt{
+			display:flex;
+			flex:1;
+			flex-wrap:wrap;
+			width:743px;
+			float:left;
+			.drama_item{
+				position:relative;
+				float:left;
+				width:227px;
+				height:132px;
+				margin: 0 0 20px 20px;
+				img{
+					width:100%;
+					height:100%;
+				}
+				.info{
+					color:#fff;
+					height:47px;
+					padding: 4px 0 0 10px;
+					.dramaName{
+						font-size: 14px;
+					}
+					.dramaOther{
+						font-size: 12px;
+					}
+				}
+			}
+		}
+		.topic_item{
+			position:relative;
+			float:left;
+			width:282px;
+			height:200px;
+			margin-right:20px;
+			&:last-child{
+				margin-right:0;
+			}
+			img{
+				width:100%;
+				height:100%;
+			}
+			.info{
+				color:rgba(255,255,255,0.9);
+				height:36px;
+				text-align:center;
+				line-height:36px;
+			}
+		}
+		.opera_item{
+			width:288px;
+			border:1px solid #e4e4e4;
+			margin-right:16px;
+			margin-bottom:20px;
+			text-align:center;
+			float:left;
+			&:last-child{
+				margin-right:0;
+			}
+			.special_name{
+				height: 46px;
+				line-height:46px;
+				padding: 0 20px;
+				font-size:16px;
+				background: #f0f0f0;
+			}
+			.cover{
+				position:relative;
+				padding:25px 17px;
+				img{
+					width: 252px;
+					height:150px;
+				}
+				.info{
+					top:25px;
+					width:calc(100% - 34px);
+					height:24px;
+					line-height:24px;
+					text-align:right;
+					color:#d8d8d8;
+					font-size:12px;
+				}
+			}
+			.detail{
+				height:180px;
+				li{
+					display:flex;
+					align-items:center;
+					justify-content: space-between;
+					line-height:32px;
+					height:32px;
+					padding:0 17px;
+					cursor: pointer;
+					color:#929292;
+					&>div{
+						float:left;
+					}
+					.playbutton{
+						float:right;
+						line-height:32px;
+						color:#c0c0c0;
+					}
+					.num{
+						display:inline-block;
+						width:24px;
+						height:24px;
+						line-height:24px;
+						margin-right:12px;
+						color:#fff;
+						background:#8c8475;
+					}
+					&.upthree{
+						.num{
+							background:#ddd;
+							color:#777;
+						}
+					}
+					&:hover{
+						background:#e4e4e4;
+						color:#cb1127;
+						.playbutton{
+							color:#cb1127;
+						}
+						.num{
+							color:#fff;
+							background:#cb1127;
+						}
+					}
+				}
+			}
+			.play{
+				height:38px;
+				line-height:38px;
+				color:#8c8475;
+				background:url('../assets/images/play1.png') no-repeat 90px center;
+				background-color:#e4e4e4;
+				&:hover{
+					color:#cb1127;
+					background:url('../assets/images/play2.png') no-repeat 90px center;
+					background-color:#e4e4e4;
+				}
+			}
+		}
+		.article_item{
+			width:282px;
+			float:left;
+			border:1px solid #e4e4e4;
+			margin-right:21px;
+			margin-bottom:20px;
+			&:last-child{
+				margin-right:0;
+			}
+			.article_name{
+				width:280px;
+				background:#e4e4e4;
+				height:34px;
+				line-height:34px;
+				text-align:center;
+				color:rgba(0,0,0,0.65);
+			}
+			.article_content{
+				display:flex;
+				padding: 9px 14px 24px;
+				color:rgba(0,0,0,0.65);
+				height:213px;
+				img{
+					width:130px;
+					height:180px;
+					flex:0 0 130px;
+					float:left;
+				}
+				.article_intro{
+					padding-left:14px;
+					font-size:12px;	
+					flex:1;
+					float:left;
+					width:122px;
+					letter-spacing: 1px;
+				}
+			}
+		}
+		.types_item{
+			width:288px;
+			height:204px;
+			float:left;
+			border:1px solid #e4e4e4;
+			margin-right:16px;
+			margin-bottom:100px;
+			padding:12px;
+			overflow:hidden;
+			&:last-child{
+				margin-right:0;
+			}
+			.title{
+				color:#000;
+				font-size:16px;
+			}
+			.tag{
+				box-sizing:border-box;
+				background:#f5f5f5;
+				display:inline-block;
+				min-width:60px;
+				padding:0 8px;
+				line-height:28px;
+				font-size:14px;
+				color:#6c6459;
+				margin:8px 4px 4px 0;
+				text-align:center;
+				&:hover{
+					background: #8c8475;
+    				color: white;
+				}
+			}
+		}
+		.info{
+			position:absolute;
+			bottom:0;
+			width:100%;
+			background:rgba(0,0,0,0.4);
+		}
+	}
+}
+}
+.titleBox{
+	width:1200px;
+	margin: 0 auto;
+	border-bottom: 2px solid #8c8475;
+	.lf{
+		position:relative;
+		margin-bottom:5px;
+		.sj{
+			position:absolute;
+			top:8px;
+			left:0;
+			width:0;
+            height:0;
+            border-top: 20px solid #787061;
+    		border-right: 20px solid transparent;
+		}
+		.typeName{
+			margin-left:50px;
+			font-size:20px;
+			color:#60594f;
+		}
+	}
+	.moreItem{
+		font-size: 14px;
+		line-height:34px;
+		color:#60594f;
+		padding-right:6px;
+		margin:0;
+	}
+}
+.collection{
+	margin: 110px auto;
+	text-align: center;
+}
+area:active{
+	border: none;
+}

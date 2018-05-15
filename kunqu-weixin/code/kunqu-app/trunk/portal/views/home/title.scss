@@ -1,0 +1,35 @@
+/*title*/
+.title-more{
+    position: relative;
+    height:60px;
+    border-top: 15px solid #f2f2f2;
+    .more{
+        width: 18px;
+        vertical-align: top;
+	    position:absolute;
+	    top:50%;
+	    left:16px;
+	    transform:translateY(-50%);
+	    -o-transform:translateY(-50%);
+	    -webkit-transform:translateY(-50%);
+	    -ms-transform:translateY(-50%);
+    }
+    .title{
+        font-size: 17px;
+        font-weight: bold;
+        color: #b59c73;
+        line-height: 45px;
+        padding-left: 45px;
+    }
+    .right-more{
+	    position:absolute;
+    	top:50%;
+        right:10px;
+        font-size:13px;
+        color:#666;
+	    transform:translateY(-50%);
+	    -o-transform:translateY(-50%);
+	    -webkit-transform:translateY(-50%);
+	    -ms-transform:translateY(-50%);
+    }
+}

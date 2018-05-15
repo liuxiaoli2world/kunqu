@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lgsc.kunqu.mapper.SpecialOperaMapper" >
+  <resultMap id="BaseResultMap" type="com.lgsc.kunqu.model.SpecialOpera" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="special_opera_id" property="specialOperaId" jdbcType="BIGINT" />
+    <result column="special_id" property="specialId" jdbcType="BIGINT" />
+    <result column="opera_id" property="operaId" jdbcType="BIGINT" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+    <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>

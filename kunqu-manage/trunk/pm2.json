@@ -1,0 +1,13 @@
+{
+  "apps": [{
+    "name": "msyx-昆曲后台管理",
+    "script": "bin/production.js",
+    "max_memory_restart": "1G",
+    "autorestart": true,
+    "node_args": [],
+    "args": [],
+    "env": {
+      "NODE_ENV": "production"
+    }
+  }]
+}

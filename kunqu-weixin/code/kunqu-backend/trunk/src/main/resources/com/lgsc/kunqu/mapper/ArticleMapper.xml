@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lgsc.kunqu.mapper.ArticleMapper">
+	<resultMap id="BaseResultMap" type="com.lgsc.kunqu.model.Article">
+		<!-- WARNING - @mbg.generated -->
+		<id column="article_id" property="articleId" jdbcType="BIGINT" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="author" property="author" jdbcType="VARCHAR" />
+		<result column="source" property="source" jdbcType="VARCHAR" />
+		<result column="release_date" property="releaseDate" jdbcType="TIMESTAMP" />
+		<result column="sum_read_count" property="sumReadCount" jdbcType="INTEGER" />
+		<result column="day_read_count" property="dayReadCount" jdbcType="INTEGER" />
+		<result column="week_count" property="weekCount" jdbcType="INTEGER" />
+		<result column="month_count" property="monthCount" jdbcType="INTEGER" />
+		<result column="is_rank_list" property="isRankList" jdbcType="INTEGER" />
+		<result column="is_boutique" property="isBoutique" jdbcType="INTEGER" />
+		<result column="is_index_recommend" property="isIndexRecommend" jdbcType="INTEGER" />
+		<result column="age_tag_id" property="ageTagId" jdbcType="BIGINT" />
+		<result column="author_tag_id" property="authorTagId" jdbcType="BIGINT" />
+		<result column="repertoire_tag_id" property="repertoireTagId" jdbcType="BIGINT" />
+		<result column="dir_id" property="dirId" jdbcType="BIGINT" />
+		<result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+		<result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+		<result column="content" property="content" jdbcType="LONGVARCHAR" />
+		<result column="article_desc" property="articleDesc" jdbcType="VARCHAR" />
+		<result column="is_list_recommend" property="isListRecommend" jdbcType="INTEGER" />
+	</resultMap>
+
+	<resultMap extends="BaseResultMap" id="ArticleImageResultMap" type="com.lgsc.kunqu.model.Article">
+		<collection column="article_id" property="articleImages" ofType="com.lgsc.kunqu.model.ArticleImage" select="com.lgsc.kunqu.mapper.ArticleImageMapper.selectByArticleId" />
+	</resultMap>
+	
+	<resultMap id="ClassifyResultMap" type="com.lgsc.kunqu.model.Article">
+		<id column="article_id" property="articleId" jdbcType="BIGINT" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="article_desc" property="articleDesc" jdbcType="VARCHAR" />
+		<collection column="article_id" property="articleImages" ofType="com.lgsc.kunqu.model.ArticleImage" select="com.lgsc.kunqu.mapper.ArticleImageMapper.selectByArticleId" />
+	</resultMap>
+
+	<!-- 根据角色标签id查询文章，返回结果附加文章图片 -->
+	<select id="selectArticleByRoleTagId" parameterType="Long" resultMap="ArticleImageResultMap">
+		select a.* from article a inner join role_tag_article r on a.article_id = r.article_id where r.role_tag_id = #{roleTagId}
+	</select>
+
+	<!-- 根据作者标签id查询文章 -->
+	<select id="selectArticleByAuthorTagId" parameterType="Long" resultMap="ArticleImageResultMap">
+		SELECT * FROM kunqu.article s where s.author_tag_id = #{authorTagId}
+	</select>
+
+
+	<!-- 根据剧目标签id查询文章，返回结果附加文章图片 -->
+	<select id="selectArticleByRepertoireTagId" parameterType="Long" resultMap="ArticleImageResultMap">
+		select * from article a inner join repertoire_tag r on a.repertoire_tag_id = r.repertoire_tag_id where r.repertoire_tag_id = #{RepertoireTagId}
+	</select>
+
+	<!-- 根据年代标签id查询文章，返回结果附加文章图片 -->
+	<select id="selectArticleByAgeTagId" parameterType="Long" resultMap="ArticleImageResultMap">
+		select * from article a inner join age_tag t on
+		a.age_tag_id=t.age_tag_id where t.age_tag_id=#{ageTagId}
+		<!-- select * from article where age_tag_id=#{ageTagId} -->
+	</select>
+
+
+	<!-- 根据剧典id查询剧典 -->
+	<select id="selectById" parameterType="long" resultMap="ArticleImageResultMap">
+		select * from article where article_id=#{articleId} 
+	</select>
+	<!-- 根据文章id查询前一篇和后一篇文章 -->
+	<select id="selectPreAfterArticle" parameterType="long" resultMap="ArticleImageResultMap" >
+	SELECT * FROM article
+	WHERE article_id IN
+	(
+	SELECT
+	CASE
+	WHEN SIGN(article_id - #{articleId}  ) &gt; 0 THEN MIN(article_id)
+	WHEN SIGN(article_id - #{articleId}  )  &lt;  0 THEN MAX(article_id)
+	END
+	AS article_id
+	FROM article
+	WHERE article_id  &lt;&gt; #{articleId}  
+	GROUP BY SIGN(article_id - #{articleId}  )
+	ORDER BY SIGN(article_id - #{articleId}  )
+	)
+	ORDER BY article_id ASC
+	</select>
+	<!-- 根据剧典id查询剧典 -->
+	<select id="selectAllArticle"  resultMap="ArticleImageResultMap">
+		select * from article  
+	</select>
+
+	<!-- 查询相应类型模块 -->
+	<select id="selectByStyle" resultMap="ArticleImageResultMap">
+		select * from article a
+		<!-- left join article_image b on a.article_id=b.article_id -->
+		<trim prefix="where" prefixOverrides="and | or">
+			<!-- 查询首页推荐,返回结果附加文章图片 -->
+			<if test="style=='is_index_recommend'">
+				and a.is_index_recommend=#{value}
+			</if>
+			<!-- 查询精品阅读,返回结果附加文章图片 -->
+			<if test="style=='is_boutique'">
+				and a.is_boutique=#{value}
+			</if>
+			<!-- 查询精品推荐,返回结果附加文章图片 -->
+			<if test="style=='is_list_recommend'">
+				and a.is_list_recommend=#{value}
+			</if>
+			<!-- 查询阅读排行,返回结果附加文章图片 -->
+			<if test="style=='is_rank_list'">
+				and a.is_rank_list=#{value}
+			</if>
+		</trim>
+	</select>
+
+	<!-- 修改dir_id为null -->
+	<update id="updateDirIdNull" parameterType="Long">
+		update article set dir_id = null where dir_id = #{dirId}
+	</update>
+	
+	<!-- 根据标签查询 -->
+	<select id="selectByTag" parameterType="Map" resultMap="ClassifyResultMap">
+		select * from article 
+		<trim prefix="where" prefixOverrides="and | or">
+			<if test="ageTagId != null">
+				and age_tag_id = #{ageTagId}
+			</if>
+			<if test="authorTagId != null">
+				and author_tag_id = #{authorTagId}
+			</if>
+			<if test="repertoireTagId != null">
+				and repertoire_tag_id = #{repertoireTagId}
+			</if>
+			<if test="roleTagId != null">
+				and article_id in (select article_id from role_tag_article where role_tag_id = #{roleTagId})
+			</if>
+		</trim>
+		order by created_at desc
+	</select>
+	
+	<!-- 根据关键字查询 -->
+	<select id="selectByKeyword" resultMap="ClassifyResultMap">
+		select * from article 
+		<trim prefix="where" prefixOverrides="and | or">
+			<if test="keyword != null">
+				and title like concat('%',#{keyword},'%')
+			</if>
+		</trim>
+		order by created_at desc
+	</select>
+
+	<!-- 根据相应内容倒序查询(如周排行、月排行) -->
+	<select id="selectArticleByDesc" parameterType="String" resultMap="ArticleImageResultMap">
+		select * from article  order by ${kind} desc
+	</select>
+
+</mapper>

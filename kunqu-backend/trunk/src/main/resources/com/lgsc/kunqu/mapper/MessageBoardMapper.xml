@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lgsc.kunqu.mapper.MessageBoardMapper">
+	<resultMap id="BaseResultMap" type="com.lgsc.kunqu.model.MessageBoard">
+		<!-- WARNING - @mbg.generated -->
+		<id column="message_board_id" property="messageBoardId" jdbcType="BIGINT" />
+		<result column="message_theme" property="messageTheme" jdbcType="VARCHAR" />
+		<result column="message_name" property="messageName" jdbcType="VARCHAR" />
+		<result column="message_content" property="messageContent" jdbcType="VARCHAR" />
+		<result column="reply" property="reply" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="SMALLINT" />
+		<result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+		<result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+		<result column="theme_id" property="themeId" jdbcType="BIGINT" />
+		<result column="theme_type" property="themeType" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+	</resultMap>
+	
+	<!-- 根据条件查询 -->
+	<select id="selectByCondition" parameterType="Map" resultMap="BaseResultMap">
+		select * from message_board
+		<trim prefix="where" prefixOverrides="and | or">
+			<if test="status != null">
+				and status = #{status}
+			</if>
+			<if test="keyword != null">
+				and message_content like concat('%',#{keyword},'%')
+			</if>
+		</trim>
+		order by created_at desc
+	</select>
+	
+</mapper>

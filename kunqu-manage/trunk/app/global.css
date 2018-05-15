@@ -1,0 +1,38 @@
+body {
+  font-family: MicrosoftYaHei;
+}
+
+.clear {
+  clear: both;
+}
+
+.search-input {
+  display: inline-block;
+  width: 300px;
+  margin-right: 15px;
+}
+.search-input:hover {
+  
+}
+
+.query-btn {
+  width: 60px;
+  height: 32px;
+  line-height: 32px;
+  border: 1px solid #8c8475;
+  border-radius: 2px;
+  color: #fff;
+  background: #8c8475;
+}
+
+.add-btn {
+  width: 60px;
+  height: 32px;
+  line-height: 32px;
+  border: 1px solid #8c8475;
+  border-radius: 2px;
+  color: #fff;
+  background: #8c8475;
+  float: right;
+  margin-right: 35px;
+}

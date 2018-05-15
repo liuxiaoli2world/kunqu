@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lgsc.kunqu.mapper.OverviewMapper">
+	<resultMap id="BaseResultMap" type="com.lgsc.kunqu.model.Overview">
+		<!-- WARNING - @mbg.generated -->
+		<id column="overview_id" property="overviewId" jdbcType="BIGINT" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="author" property="author" jdbcType="VARCHAR" />
+		<result column="source" property="source" jdbcType="VARCHAR" />
+		<result column="release_date" property="releaseDate" jdbcType="TIMESTAMP" />
+		<result column="dir_id" property="dirId" jdbcType="BIGINT" />
+		<result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+		<result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+		<result column="content" property="content" jdbcType="LONGVARCHAR" />
+	</resultMap>
+
+	<!-- 修改dir_id为null -->
+	<update id="updateDirIdNull" parameterType="Long">
+		update overview set dir_id = null where dir_id = #{dirId}
+	</update>
+
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lgsc.kunqu.mapper.DramaImageMapper" >
+  <resultMap id="BaseResultMap" type="com.lgsc.kunqu.model.DramaImage" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="drama_image_id" property="dramaImageId" jdbcType="BIGINT" />
+    <result column="drama_id" property="dramaId" jdbcType="BIGINT" />
+    <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="image_scene" property="imageScene" jdbcType="VARCHAR" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+    <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <!-- 根据DramaId查询剧典封面 -->
+  <select id="selectByDramaId" parameterType="Long" resultMap="BaseResultMap"> 
+  	select * from drama_image where drama_id = #{dramaId}
+  </select>
+  
+</mapper>

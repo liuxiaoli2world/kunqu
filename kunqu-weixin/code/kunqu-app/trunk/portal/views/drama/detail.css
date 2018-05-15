@@ -1,0 +1,83 @@
+ul,li{
+	list-style:none;
+	padding:0;
+	margin:0;
+}
+.oneline{
+	overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.suggest-detail{
+	background:#ffffff;
+	margin: 0 0.1rem;
+	padding-bottom:0.25rem;
+	border-bottom: #e1e1e1 solid 1px;
+}
+.title{
+	font-size: 0.29rem;
+    height: 0.6rem;
+    line-height: 0.6rem;
+	padding-left:0.1rem;
+}
+.suggest-cont{
+	position:relative;
+	font-size: 0.225rem;
+    color: #989898;
+    padding: 0 0.1rem;
+    line-height: 0.4rem;
+	max-height: 2.4rem;
+	overflow: hidden;
+}
+.suggest-cont::after{
+	content:'《阅读全文》';
+	position:absolute;
+	bottom:0;
+	right:0;
+	color:#8a6643;
+	background:#fff;
+}
+div.readAll{
+	position:absolute;
+	bottom:0;
+	right:0;
+	width:1.4rem;
+	height:0.36rem;
+	z-index: 999;
+}
+.allCon{
+	position:relative;
+	font-size: 0.225rem;
+    color: #989898;
+	padding: 0 0.1rem;
+    line-height: 0.4rem;
+}
+.suggest-list{
+	overflow:hidden;
+	padding:0.1rem;
+	width:100%;
+	box-sizing:border-box;
+}
+.suggest-list li{
+	float:left;
+	width:33.3%;
+}
+.suggest-list li .suggest-img{
+	width:95%;
+	margin:0 auto;
+	border-radius:5px;
+	display:block;
+}
+.suggest-title{
+	font-size:0.215rem;
+	color:#989898;
+	text-align:center;
+	height:0.4rem;
+	line-height:0.4rem;
+}
+.operaName{
+	background:#f8f8f8;
+	color:#333;
+	font-size:14px;
+	padding:12px 0 12px 10px;
+}

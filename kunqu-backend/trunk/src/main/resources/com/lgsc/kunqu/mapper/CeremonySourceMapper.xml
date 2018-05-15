@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lgsc.kunqu.mapper.CeremonySourceMapper" >
+  <resultMap id="BaseResultMap" type="com.lgsc.kunqu.model.CeremonySource" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ceremony_source_id" property="ceremonySourceId" jdbcType="BIGINT" />
+    <result column="ceremony_id" property="ceremonyId" jdbcType="BIGINT" />
+    <result column="source_type" property="sourceType" jdbcType="VARCHAR" />
+    <result column="source_id" property="sourceId" jdbcType="BIGINT" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+    <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <resultMap id="CeremonySourceMap" type="java.util.Map" >
+		<id column="source_id" property="sourceId" jdbcType="BIGINT" />
+		<result column="source_name" property="sourceName" jdbcType="VARCHAR" />
+		<result column="source_desc" property="sourceDesc" jdbcType="VARCHAR" />
+		<result column="source_amount" property="sourceAmount" jdbcType="INTEGER" />
+		<discriminator javaType="string" column="source_type">
+			<case value="article" resultMap="ArticleImageMap"/>
+			<case value="drama" resultMap="DramaImageMap"/>
+			<case value="special" resultMap="SpecialImageMap"/>
+		</discriminator>
+	</resultMap>
+
+	<!-- 文章映射 -->
+	<resultMap type="java.util.Map" id="ArticleImageMap" extends="CeremonySourceMap">
+		<collection property="sourceImages" ofType="com.lgsc.kunqu.model.ArticleImage" column="source_id"
+		select="com.lgsc.kunqu.mapper.ArticleImageMapper.selectByArticleId" fetchType="eager"/>
+	</resultMap>
+
+	<!-- 剧典映射 -->
+	<resultMap type="java.util.Map" id="DramaImageMap" extends="CeremonySourceMap"> 
+		<collection property="sourceImages" ofType="com.lgsc.kunqu.model.DramaImage" column="source_id" 
+			select="com.lgsc.kunqu.mapper.DramaImageMapper.selectByDramaId" fetchType="eager" />
+	</resultMap>
+	
+	<!-- 曲典映射 -->
+	<resultMap type="java.util.Map" id="SpecialImageMap" extends="CeremonySourceMap">
+		<collection property="sourceImages" ofType="com.lgsc.kunqu.model.SpecialImage" column="source_id" 
+		 select="com.lgsc.kunqu.mapper.SpecialImageMapper.selectSpecialImageById" fetchType="eager"/>
+	</resultMap>
+	
+	<select id="selectBy" resultMap="CeremonySourceMap">
+		<choose>
+			<when test="sourceType == 'article' "> 
+				select
+					a.article_id as source_id,
+					a.title as source_name,
+					a.article_desc as source_desc,
+					a.sum_read_count as source_amount,
+					cs.source_type
+				from ceremony_source cs
+				Left JOIN article a on a.article_id = cs.source_id
+			</when>
+			<when test="sourceType == 'drama' ">
+				select
+					d.drama_id as source_id,
+					d.drama_name as source_name,
+					d.drama_desc as source_desc,
+					d.paly_amount as source_amount,
+					cs.source_type
+				 from ceremony_source cs
+				Left JOIN drama d on d.drama_id = cs.source_id 
+			
+			</when>
+			<when test="sourceType == 'special' ">
+				select 
+					s.special_id as source_id,
+					s.special_name as source_name,
+					s.special_desc as source_desc,
+					s.paly_amount as source_amount,
+					cs.source_type
+				 from ceremony_source cs
+				Left JOIN special s on s.special_id = cs.source_id
+			</when>
+		</choose>
+		where cs.ceremony_id = #{id} and cs.source_type = #{sourceType}
+		ORDER BY cs.updated_at
+	</select>
+	
+	<select id="selectSourceIds" resultType="long" >
+		SELECT source_id from ceremony_source where ceremony_id = #{id} and source_type = #{sourceType}
+	</select>
+</mapper>
